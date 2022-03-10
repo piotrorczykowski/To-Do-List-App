@@ -1,28 +1,61 @@
 const ToDo = require('../db/models/todo')
 
 class todoActions {
-    getAllToDos(req, res) {
-        res.send('get all ok')
+    async getAllToDos(req, res) {
+        try {
+            const doc = await ToDo.find({})
+            res.status(200).send(doc)
+        } catch (err) {
+            res.status(500).json({ message: err.message })
+        }
     }
 
-    getToDo(req, res) {
+    async getToDo(req, res) {
         const id = req.params.id
-        res.send(`get one ok, id: ${id}`)
+        try {
+            const todo = await ToDo.findOne({ _id: id})
+            res.status(200).send(todo)
+        } catch (err) {
+            res.status(500).json({ message: err.message })
+        }
     }
 
-    saveToDo(req, res) {
+    async saveToDo(req, res) {
         const title = req.body.title
-        res.send(`save ok, title: ${title}`)
+
+        try {
+            const newToDo = new ToDo({ title })
+            await newToDo.save()
+            res.status(201).send(newToDo)
+        } catch (err) {
+            res.status(422).json({ message: err.message })
+        }
     }
 
-    editToDo(req, res) {
+    async editToDo(req, res) {
         const id = req.params.id
-        res.send(`edit ok, id: ${id}`)
+        const title = req.body.title
+
+        try {
+            const toDo = await ToDo.findOne({ _id: id })
+            toDo.title = title
+            await toDo.save() 
+    
+            res.status(201).send(toDo)
+        } catch (err) {
+            res.status(500).json({ message: err.message })
+        }
     }
     
-    deleteToDo(req, res) {
+    async deleteToDo(req, res) {
         const id = req.params.id
-        res.send(`delete ok, id: ${id}`)
+
+        try {
+            await ToDo.deleteOne({ _id: id })
+            res.sendStatus(204)
+        } catch (err) {
+            res.status(500).json({ message: err.message })
+        }
     }
 }
 
