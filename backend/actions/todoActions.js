@@ -1,6 +1,16 @@
+const ToDo = require('../db/models/todo')
+
 class todoActions {
-    test(req, res) {
-        res.send('oK!')
+    saveToDo(req, res) {
+        const newTodo = new ToDo({
+            title: 'Develop a new feature'
+        })
+
+        newTodo.save().then(() => {
+            console.log('oK!')
+        })
+
+        res.send('oK')
     }
 }
 

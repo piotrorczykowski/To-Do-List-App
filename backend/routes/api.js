@@ -3,6 +3,6 @@ const router = express.Router()
 
 const todoActions = require('../actions/todoActions')
 
-router.get('/', todoActions.test)
+router.get('/', todoActions.saveToDo)
 
 module.exports = router
