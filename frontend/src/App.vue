@@ -2,26 +2,97 @@
   <div id="app">
     <h1 id="title">todos</h1>
 
-    <div id="placeholder">
+    <div
+      class="todo"
+      v-for="todo in todos"
+      v-bind:key="todo._id">
+      <div class="item">
+        <img
+          class="circle" 
+          v-bind:src="require('@/assets/circle.png')" 
+          alt="Left icon" 
+          v-on:click="doneToDo(todo._id)" 
+          ref="circle">
+        <h2 v-bind:class="{ done: todo.done }"> 
+          {{ todo.title }} 
+        </h2>
+        <img
+          class="cancel"
+          src="@/assets/cancel.png"
+          alt="Cancel"
+          v-on:click="removeToDo(todo._id)">
+      </div>
+    </div>
+
+    <div id="placeholder" v-if="!countOfToDos">
       <img src="@/assets/to-do-list.png" alt="check-list">
       <h2>Add your first todo</h2>
       <h3>What do you want to get done today?</h3>
     </div>
     
-    <form id="newToDoForm">
+    <form id="newToDoForm" v-on:submit.prevent>
       <label for="newToDo"></label>
-      <input type="text" id="newToDo" name="newToDo" placeholder="E.g. Buy something">
+      <input
+        id="newToDo"
+        type="text"
+        name="newToDo"
+        autocomplete="off"
+        maxlength="30"
+        placeholder="E.g. Buy something"
+        v-on:keyup.enter="addToDo"
+        v-model="newToDo">
     </form>
   </div>
 </template>
 
+
+
 <script>
-export default {
-  
-}
+  export default {
+    data() {
+      return {
+        newToDo: '',
+        todos: [
+          { title: 'Buy something', done: false, _id: Math.random() },
+          { title: 'Do something', done: false, _id: Math.random() }
+        ],
+        countOfToDos: 2
+      }
+    },
+    methods: {
+      addToDo() {
+        this.todos.push({
+          title: this.newToDo,
+          done: false,
+          _id: Math.random()
+        })
+
+        this.newToDo = ''
+        this.countOfToDos++
+      },
+      removeToDo(_id) {
+        const index = this.todos.findIndex(todo => todo._id === _id)
+        this.todos.splice(index, 1)
+        this.countOfToDos--
+      },
+      doneToDo(_id) {
+        const index = this.todos.findIndex(todo => todo._id === _id)
+        this.todos[index].done = !(this.todos[index].done)
+
+        const circleIcon = require('@/assets/circle.png')
+        const checkedIcon = require('@/assets/checked.png')
+        this.todos[index].done ? this.$refs.circle[index].src = checkedIcon : this.$refs.circle[index].src = circleIcon
+      }
+    }
+    
+  }
 </script>
 
+
+
 <style>
+  @import url("https://fonts.googleapis.com/css?family=Tangerine");
+
   * {
     margin: 0;
     padding: 0;
@@ -43,6 +114,59 @@ export default {
     color: gray;
   }
 
+  .todo {
+    padding: 0.5em;
+    font-size: 1.2em;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-self: center;
+  }
+
+  .item {
+    width: 26.5em;
+    height: 2em;
+    display: relative;
+  }
+
+  .item .circle {
+    position: absolute;
+    left: calc(50vw - 26.5em / 2);
+  }
+
+  .item h2 {
+    position: absolute;
+    left: calc(50vw - 7em);
+  }
+
+  .item .cancel {
+    position: absolute;
+    left: calc(50vw + 11.2em);
+  }
+
+  .done {
+    text-decoration: line-through;
+    color: gray;
+  }
+
+  .circle, .cancel {
+    width: 2em;
+    height: 2em;
+
+    cursor: pointer;
+  }
+
+  .circle:hover, .cancel:hover {
+    transform: scale(1.1);
+    transition-duration: 0.2s;
+  }
+
+  .cancel:hover {
+    transition-duration: 0.1s;
+    filter: invert(18%) sepia(92%) saturate(6493%) hue-rotate(356deg) brightness(87%) contrast(100%);
+  }
+  
   #placeholder {
     align-self: center;
     text-align: center;
