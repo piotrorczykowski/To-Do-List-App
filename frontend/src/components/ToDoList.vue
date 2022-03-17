@@ -33,7 +33,8 @@
 </template>
 
 <script>
-import ToDo from "./ToDo.vue";
+import ToDo from "./ToDo.vue"
+import axios from 'axios'
 
 export default {
   components: {
@@ -42,11 +43,17 @@ export default {
   data() {
     return {
       newToDo: "",
-      todos: [
-        { title: "Buy something", done: false, _id: Math.random() },
-        { title: "Do something", done: false, _id: Math.random() },
-      ],
-      countOfToDos: 2
+      todos: [],
+      countOfToDos: 0
+    }
+  },
+  async created() {
+    try {
+      const res = await axios.get('http://localhost:3000/todos')
+      this.todos = res.data
+      this.countOfToDos =  res.data.length
+    } catch(err) {
+      console.log(err.message)
     }
   },
   methods: {

@@ -3,7 +3,7 @@
     <div class="item">
       <img
         class="circle"
-        v-bind:src="require('@/assets/circle.png')"
+        v-bind:src=" todo.done ? require('@/assets/checked.png') : require('@/assets/circle.png') "
         alt="Left icon"
         v-on:click="doneToDo()"
         ref="circle"
@@ -31,10 +31,6 @@ export default {
       },
       doneToDo() {
           this.$emit('doneClicked', this.todo._id)
-
-          const circleIcon = require("@/assets/circle.png")
-          const checkedIcon = require("@/assets/checked.png")
-          this.todo.done ? this.$refs.circle.src = checkedIcon : this.$refs.circle.src = circleIcon
       }
   }
 }
