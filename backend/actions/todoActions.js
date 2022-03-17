@@ -24,7 +24,10 @@ class todoActions {
         const title = req.body.title
 
         try {
-            const newToDo = new ToDo({ title })
+            const newToDo = new ToDo({
+                title: title,
+                done: false
+            })
             await newToDo.save()
             res.status(201).send(newToDo)
         } catch (err) {
@@ -35,10 +38,12 @@ class todoActions {
     async editToDo(req, res) {
         const id = req.params.id
         const title = req.body.title
+        const done = req.body.done
 
         try {
             const toDo = await ToDo.findOne({ _id: id })
             toDo.title = title
+            toDo.done = done
             await toDo.save() 
     
             res.status(201).send(toDo)
