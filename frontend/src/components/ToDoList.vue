@@ -51,14 +51,16 @@ export default {
   },
   methods: {
     addToDo() {
-      this.todos.push({
-        title: this.newToDo,
-        done: false,
-        _id: Math.random(),
-      });
+      if(this.newToDo) {
+        this.todos.push({
+          title: this.newToDo,
+          done: false,
+          _id: Math.random(),
+        })
 
-      this.newToDo = ""
-      this.countOfToDos++
+        this.newToDo = ""
+        this.countOfToDos++
+      }
     },
     removeToDo(_id) {
       const index = this.todos.findIndex((todo) => todo._id === _id)
