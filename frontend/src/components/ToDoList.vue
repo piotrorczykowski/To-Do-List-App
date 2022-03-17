@@ -57,26 +57,45 @@ export default {
     }
   },
   methods: {
-    addToDo() {
+    async addToDo() {
       if(this.newToDo) {
-        this.todos.push({
-          title: this.newToDo,
-          done: false,
-          _id: Math.random(),
-        })
-
-        this.newToDo = ""
-        this.countOfToDos++
+        try {
+          const res = await axios.post('http://localhost:3000/todos', {
+            title: this.newToDo
+          })
+          this.todos.push(res.data)
+  
+          this.countOfToDos++
+          this.newToDo = ""
+        } catch(err) {
+          console.log(err.message)
+        }
       }
     },
-    removeToDo(_id) {
+    async removeToDo(_id) {
       const index = this.todos.findIndex((todo) => todo._id === _id)
-      this.todos.splice(index, 1)
-      this.countOfToDos--
+
+      try {
+        await axios.delete('http://localhost:3000/todos/' + _id)
+
+        this.todos.splice(index, 1)
+        this.countOfToDos--
+      } catch(err) {
+        console.log(err.message)
+      }
     },
-    doneToDo(_id) {
+    async doneToDo(_id) {
       const index = this.todos.findIndex((todo) => todo._id === _id)
-      this.todos[index].done = !this.todos[index].done
+
+      try {
+        const res = await axios.put('http://localhost:3000/todos/' + _id, {
+          title: this.todos[index].title,
+          done: !this.todos[index].done
+        })
+        this.todos[index] = res.data
+      } catch(err) {
+        console.log(err.message)
+      }
     }
   }
 }
@@ -92,7 +111,7 @@ export default {
 }
 
 #app {
-  height: 95vh;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   margin-top: 5vh;
