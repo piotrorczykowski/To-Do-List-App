@@ -66,7 +66,7 @@ export default {
 
 .item .cancel {
   position: absolute;
-  left: calc(50vw + 10.5em);
+  left: calc(50vw + 11.2em);
 }
 
 .done {
