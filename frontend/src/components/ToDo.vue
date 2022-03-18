@@ -94,4 +94,30 @@ export default {
   filter: invert(18%) sepia(92%) saturate(6493%) hue-rotate(356deg)
     brightness(87%) contrast(100%);
 }
+
+/* Mobile */
+@media only screen and (max-width: 600px) {
+  .item {
+    width: 80vw;
+    height: 3em;
+  }
+
+  .item .circle {
+  position: absolute;
+  left: 1.5em;
+  }
+
+  .item h2 {
+    position: absolute;
+    left: calc(50vw - 4em);
+    width: 60vw;
+    word-break: break-all;
+  }
+
+  .item .cancel {
+    position: absolute;
+    left: calc(80vw + 0.5em);
+  }
+
+}
 </style>

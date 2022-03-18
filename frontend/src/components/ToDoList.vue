@@ -166,4 +166,16 @@ export default {
   border: 2px solid black;
   border-radius: 0.2em;
 }
+
+/* Mobile */
+@media only screen and (max-width: 600px) {
+  #app {
+    width: 100vw;
+
+  }
+
+  #newToDo {
+    width: 80vw;
+  }
+}
 </style>
