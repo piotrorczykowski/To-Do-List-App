@@ -34,7 +34,7 @@
 
 <script>
 import ToDo from "./ToDo.vue"
-import axios from 'axios'
+import axios from '../axios'
 
 export default {
   components: {
@@ -49,7 +49,7 @@ export default {
   },
   async created() {
     try {
-      const res = await axios.get('http://localhost:3000/todos')
+      const res = await axios.get('/todos')
       this.todos = res.data
       this.countOfToDos =  res.data.length
     } catch(err) {
@@ -60,9 +60,12 @@ export default {
     async addToDo() {
       if(this.newToDo) {
         try {
-          const res = await axios.post('http://localhost:3000/todos', {
+          //  add to backend
+          const res = await axios.post('/todos', {
             title: this.newToDo
           })
+
+          //  add to frontend
           this.todos.push(res.data)
   
           this.countOfToDos++
@@ -76,8 +79,10 @@ export default {
       const index = this.todos.findIndex((todo) => todo._id === _id)
 
       try {
-        await axios.delete('http://localhost:3000/todos/' + _id)
+        //  remove from backend
+        await axios.delete('/todos/' + _id)
 
+        //  remove from frontend
         this.todos.splice(index, 1)
         this.countOfToDos--
       } catch(err) {
@@ -88,10 +93,13 @@ export default {
       const index = this.todos.findIndex((todo) => todo._id === _id)
 
       try {
-        const res = await axios.put('http://localhost:3000/todos/' + _id, {
+        //  edit todo in backend
+        const res = await axios.put('/todos/' + _id, {
           title: this.todos[index].title,
           done: !this.todos[index].done
         })
+
+        //  rewrite frontend todo by todo from backend
         this.todos[index] = res.data
       } catch(err) {
         console.log(err.message)
@@ -119,7 +127,6 @@ export default {
 
 #title {
   align-self: center;
-
   font-size: 5em;
   color: gray;
 }
@@ -127,7 +134,6 @@ export default {
 #placeholder {
   align-self: center;
   text-align: center;
-
   padding: 1em;
 }
 

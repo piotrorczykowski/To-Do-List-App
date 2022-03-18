@@ -3,7 +3,7 @@
     <div class="item">
       <img
         class="circle"
-        v-bind:src=" todo.done ? require('@/assets/checked.png') : require('@/assets/circle.png') "
+        v-bind:src="todo.done ? require('@/assets/checked.png') : require('@/assets/circle.png')"
         alt="Left icon"
         v-on:click="doneToDo()"
         ref="circle"
@@ -90,6 +90,7 @@ export default {
 
 .cancel:hover {
   transition-duration: 0.1s;
+  /* Change cancel icon color from black to red  */
   filter: invert(18%) sepia(92%) saturate(6493%) hue-rotate(356deg)
     brightness(87%) contrast(100%);
 }
